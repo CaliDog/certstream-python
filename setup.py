@@ -1,8 +1,6 @@
 from setuptools import setup
 import os
 
-import certstream
-
 here = os.path.abspath(os.path.dirname(__file__))
 
 with open('requirements.txt') as f:
@@ -16,10 +14,11 @@ It supports automatic reconnection when networks issues occur, and should be sta
 
 setup(
     name='certstream',
-    version=certstream.__version__,
+    version="1.5",
     url='https://github.com/CaliDog/certstream-python/',
     author='Ryan Sears',
     install_requires=dependencies,
+    setup_requires=dependencies,
     author_email='ryan@calidog.io',
     description='CertStream is a library for receiving certificate transparency list updates in real time.',
     long_description=long_description,
