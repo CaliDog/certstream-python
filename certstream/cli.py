@@ -33,7 +33,7 @@ def main():
                     "[{}]".format(datetime.datetime.fromtimestamp(message['data']['seen']).isoformat()),
                     message['data']['source']['url'],
                     message['data']['leaf_cert']['subject']['CN'],
-                    "[{}]".format(", ".join(message['data']['leaf_cert']['all_domains']))
+                    "[{}]".format(", ".join(message['data']['leaf_cert']['all_domains'])) if args.full else ""
                 )
 
                 sys.stdout.write(payload)
@@ -47,7 +47,7 @@ def main():
                         termcolor.colored(", ", 'blue').join(
                             [termcolor.colored(x, 'white', attrs=["bold",]) for x in message['data']['leaf_cert']['all_domains']]
                         )
-                    ) + termcolor.colored("]", 'blue'),
+                    ) + termcolor.colored("]", 'blue') if args.full else "",
                 )
                 sys.stdout.write(payload)
 
