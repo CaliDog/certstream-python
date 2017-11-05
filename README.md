@@ -46,6 +46,27 @@ logging.basicConfig(format='[%(levelname)s:%(name)s] %(asctime)s - %(message)s',
 certstream.listen_for_events(print_callback)
 ```
 
+You can also register an `on_open` and `on_error` handler as well, which do exactly what you'd expect:
+
+```python
+
+import certstream
+
+def print_callback(message, context):
+    print("Received messaged -> {}".format(message))
+
+def on_open(instance):
+    # Instance is the CertStreamClient instance that was opened
+    print("Connection successfully established!")
+
+def on_error(instance, exception):
+    # Instance is the CertStreamClient instance that barfed
+    print("Exception in CertStreamClient! -> {}".format(exception)) 
+
+certstream.listen_for_events(print_callback, on_open=on_open, on_error=on_error)
+
+```
+
 # Example data structure
 
 The data structure coming from CertStream looks like this:
