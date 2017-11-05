@@ -14,12 +14,19 @@ parser = argparse.ArgumentParser(description='Connect to the CertStream and proc
 parser.add_argument('--json', action='store_true', help='Output raw JSON to the console.')
 parser.add_argument('--full', action='store_true', help='Output all SAN addresses as well')
 parser.add_argument('--disable-colors', action='store_true', help='Disable colors when writing a human readable ')
+parser.add_argument('--verbose', action='store_true', default=False, dest='verbose', help='Display debug logging.')
 
 def main():
     args = parser.parse_args()
 
     # Ignore broken pipes
     signal(SIGPIPE, SIG_DFL)
+
+    log_level = logging.INFO
+    if args.verbose:
+        log_level = logging.DEBUG
+
+    logging.basicConfig(format='[%(levelname)s:%(name)s] %(asctime)s - %(message)s', level=log_level)
 
     def _handle_messages(message, context):
         if args.json:
