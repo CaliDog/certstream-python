@@ -43,7 +43,6 @@ class CertStreamClient(WebSocketApp):
         logging.error("Error connecting to CertStream - {} - Sleeping for a few seconds and trying again...".format(ex))
 
 def listen_for_events(message_callback, skip_heartbeats=True):
-    logging.basicConfig(format='[%(levelname)s:%(name)s] %(asctime)s - %(message)s', level=logging.INFO)
     try:
         while True:
             c = CertStreamClient(message_callback, skip_heartbeats=skip_heartbeats)
