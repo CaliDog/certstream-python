@@ -44,8 +44,8 @@ class CertStreamClient(WebSocketApp):
     def _on_error(self, instance, ex):
         if type(ex) == KeyboardInterrupt:
             raise
-        if self.on_error:
-            self.on_error(instance, ex)
+        if self.on_error_handler:
+            self.on_error_handler(instance, ex)
         logging.error("Error connecting to CertStream - {} - Sleeping for a few seconds and trying again...".format(ex))
 
 def listen_for_events(message_callback, skip_heartbeats=True, setup_logger=True, on_open=None, on_error=None):
