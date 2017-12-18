@@ -1,45 +1,51 @@
 # coding=utf-8
-import Queue
-import json
-
-import os
-
 import itertools
+import json
+import logging
+import os
+import Queue
+import threading
+
+import certstream
+
 import urwid
 import urwid.curses_display
-import threading
-import certstream
+from urwid.container import Columns, Pile
+from urwid.decoration import WidgetDecoration
+from urwid.widget import Divider, SolidFill, Text, WidgetWrap
+
 
 def show_or_exit(key):
     if key in ('q', 'Q'):
         raise urwid.ExitMainLoop()
 
 """
-This is the very hacky result of a weekend fighting with Urwid to create a more gui-driven experience for CertStream (and an 
-attempt to replicate the feed watcher on certstream.calidog.io). I spent more time than I care to admit to messing with this 
-and hit my breaking point :-/ 
+This is the very hacky result of a weekend fighting with Urwid to create a more gui-driven experience for CertStream (and an
+attempt to replicate the feed watcher on certstream.calidog.io). I spent more time than I care to admit to messing with this
+and hit my breaking point :-/
 
-If anyone else feels like taking this up let me know, and I'll be happy to help! Otherwise this will inevitably be garbage 
-collected at some point in the future. 
+If anyone else feels like taking this up let me know, and I'll be happy to help! Otherwise this will inevitably be garbage
+collected at some point in the future.
 """
 
 urwid.set_encoding("UTF-8")
 
 PALETTE = [
-    ('headings', 'white,underline', 'black', 'bold,underline'), # bold text in monochrome mode
+    ('headings', 'white,underline', 'black', 'bold,underline'),  # bold text in monochrome mode
     ('body_text', 'light green', 'black'),
     ('heartbeat_active', 'light red', 'black'),
     ('heartbeat_inactive', 'light green', 'black'),
     ('buttons', 'yellow', 'dark green', 'standout'),
-    ('section_text', 'body_text'), # alias to body_text
+    ('section_text', 'body_text'),  # alias to body_text
 ]
+
 
 class CertStreamGui(object):
     INTRO_MESSAGE = u"""
-   _____          _    _____ _                            
-  / ____|        | |  / ____| |                           
- | |     ___ _ __| |_| (___ | |_ _ __ ___  __ _ _ __ ___  
- | |    / _ \ '__| __|\___ \| __| '__/ _ \/ _` | '_ ` _ \ 
+   _____          _    _____ _
+  / ____|        | |  / ____| |
+ | |     ___ _ __| |_| (___ | |_ _ __ ___  __ _ _ __ ___
+ | |    / _ \ '__| __|\___ \| __| '__/ _ \/ _` | '_ ` _ \
  | |___|  __/ |  | |_ ____) | |_| | |  __/ (_| | | | | | |
   \_____\___|_|   \__|_____/ \__|_|  \___|\__,_|_| |_| |_|
 
@@ -67,7 +73,6 @@ Protip: Looking for the old CertStream CLI behavior? Use the --grep flag!
         self.setup_widgets()
         self.setup_certstream_listener()
         self._animate_waiter()
-
 
     def setup_widgets(self):
         self.intro_frame = urwid.LineBox(
@@ -131,7 +136,7 @@ Protip: Looking for the old CertStream CLI behavior? Use the --grep flag!
 
         WIDTH = 28
 
-        cycle = itertools.cycle(range(1, WIDTH) + list(reversed(range(0, WIDTH-1))))
+        cycle = itertools.cycle(range(1, WIDTH) + list(reversed(range(0, WIDTH - 1))))
 
         def _anim(loop, args):
             INTRO_MESSAGE, gui = args
@@ -180,9 +185,9 @@ Protip: Looking for the old CertStream CLI behavior? Use the --grep flag!
         logging.info("item_focused called...")
 
         logging.info("Len {} | {}".format(
-                len(self.list_walker),
-                self.list_box.get_focus()[1]
-            )
+            len(self.list_walker),
+            self.list_box.get_focus()[1]
+        )
         )
 
         self.counter_text.set_text(
@@ -224,7 +229,7 @@ Protip: Looking for the old CertStream CLI behavior? Use the --grep flag!
                                         Divider('─'),
                                         ('fixed', 1, urwid.Text(u'┘')),
                                     ])
-                                 )
+                                )
                             ]
                         ),
                         SidelessLineBox(
@@ -242,20 +247,20 @@ Protip: Looking for the old CertStream CLI behavior? Use the --grep flag!
         if message['message_type'] == 'certificate_update':
             _, original_offset = self.list_box.get_focus()
             self.list_walker.insert(0,
-                urwid.AttrMap(
-                    FauxButton(
-                        "[{}] {} - {}".format(
-                            message['data']['cert_index'],
-                            message['data']['source']['url'],
-                            message['data']['leaf_cert']['subject']['CN'],
-                        ),
-                        user_data=message,
-                        on_press=self.focus_right_panel
-                    ),
-                    '',
-                    focus_map='buttons'
-                )
-            )
+                                    urwid.AttrMap(
+                                        FauxButton(
+                                            "[{}] {} - {}".format(
+                                                message['data']['cert_index'],
+                                                message['data']['source']['url'],
+                                                message['data']['leaf_cert']['subject']['CN'],
+                                            ),
+                                            user_data=message,
+                                            on_press=self.focus_right_panel
+                                        ),
+                                        '',
+                                        focus_map='buttons'
+                                    )
+                                    )
 
             self.counter_text.set_text(
                 self.COUNTER_FORMAT.format(
@@ -276,7 +281,8 @@ Protip: Looking for the old CertStream CLI behavior? Use the --grep flag!
 
             self.right_text.set_text(
                 json.dumps(
-                    self.list_walker[offset - self.list_box.get_focus()[1] - 1].original_widget.user_data['data']['leaf_cert'],
+                    self.list_walker[offset - self.list_box.get_focus()[1] -
+                                     1].original_widget.user_data['data']['leaf_cert'],
                     indent=4
                 )
             )
@@ -286,20 +292,18 @@ Protip: Looking for the old CertStream CLI behavior? Use the --grep flag!
     def run(self):
         self.loop.run()
 
+
 class Selector(urwid.SelectableIcon):
+
     def __init__(self, text, cursor_position):
         super(Selector, self).__init__(text, cursor_position)
 
-import logging
 logging.basicConfig(filename='out.log', level=logging.DEBUG)
 
 urwid.escape.SHOW_CURSOR = ''
 
 gui = CertStreamGui()
 
-from urwid.widget import WidgetWrap, Divider, SolidFill, Text
-from urwid.container import Pile, Columns
-from urwid.decoration import WidgetDecoration
 
 class FauxButton(urwid.Button):
     button_left = Text("")
@@ -381,7 +385,7 @@ class SidelessLineBox(WidgetDecoration, WidgetWrap):
             middle_widgets.append(('fixed', 1, rline))
 
         middle = Columns(middle_widgets,
-                box_columns=[0, 2], focus_column=focus_col)
+                         box_columns=[0, 2], focus_column=focus_col)
 
         if bline:
             bottom = Columns([
@@ -416,5 +420,3 @@ class SidelessLineBox(WidgetDecoration, WidgetWrap):
 
 
 gui.run()
-
-
