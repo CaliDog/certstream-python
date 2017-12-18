@@ -7,9 +7,9 @@ with open('requirements.txt') as f:
     dependencies = f.read().splitlines()
 
 long_description = """
-Certstream is a library to connect to the certstream network (certstream.calidog.io). 
+Certstream is a library to connect to the certstream network (certstream.calidog.io).
 
-It supports automatic reconnection when networks issues occur, and should be stable for long-running jobs. 
+It supports automatic reconnection when networks issues occur, and should be stable for long-running jobs.
 """
 
 setup(
@@ -22,15 +22,15 @@ setup(
     author_email='ryan@calidog.io',
     description='CertStream is a library for receiving certificate transparency list updates in real time.',
     long_description=long_description,
-    packages=['certstream',],
+    packages=['certstream'],
     include_package_data=True,
     entry_points={
         'console_scripts': [
             'certstream = certstream.cli:main',
         ],
     },
-    license = "MIT",
-    classifiers = [
+    license="MIT",
+    classifiers=[
         "Development Status :: 4 - Beta",
         "License :: OSI Approved :: MIT License",
         "Topic :: Internet :: WWW/HTTP",

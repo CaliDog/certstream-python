@@ -1,14 +1,14 @@
+import logging
 import time
 from collections import deque
 
 import certstream
 
-import logging
-
 logger = logging.getLogger('stat_counter')
 
 NUM_MINUTES = 1
 INTERVAL = NUM_MINUTES * 60
+
 
 def callback(message, context):
     if not context.get('edge'):
