@@ -48,16 +48,14 @@ class CertStreamClient(WebSocketApp):
             self.on_error_handler(instance, ex)
         logging.error("Error connecting to CertStream - {} - Sleeping for a few seconds and trying again...".format(ex))
 
-def listen_for_events(message_callback, skip_heartbeats=True, setup_logger=True, on_open=None, on_error=None, 
-                      http_proxy_host=None, http_proxy_port=None, http_proxy_auth=None):
+def listen_for_events(message_callback, skip_heartbeats=True, setup_logger=True, on_open=None, on_error=None, **kwargs):
     if setup_logger:
         logging.basicConfig(format='[%(levelname)s:%(name)s] %(asctime)s - %(message)s', level=logging.INFO)
 
     try:
         while True:
             c = CertStreamClient(message_callback, skip_heartbeats=skip_heartbeats, on_open=on_open, on_error=on_error)
-            c.run_forever(http_proxy_host=http_proxy_host, http_proxy_port=http_proxy_port, 
-                          http_proxy_auth=http_proxy_auth)
+            c.run_forever(**kwargs)
             time.sleep(5)
     except KeyboardInterrupt:
         logging.info("Kill command received, exiting!!")
