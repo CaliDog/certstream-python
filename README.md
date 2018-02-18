@@ -67,6 +67,19 @@ certstream.listen_for_events(print_callback, on_open=on_open, on_error=on_error)
 
 ```
 
+We also support connection via http proxy:
+
+```python
+import certstream
+
+def print_callback(message, context):
+    print("Received messaged -> {}".format(message))
+
+certstream.listen_for_events(print_callback, http_proxy_host="proxy_host", http_proxy_port=8080, http_proxy_auth=("user", "password"))
+```
+
+Need more connection options? Take a look at `**kwargs` in `certstream.listen_for_events`. We pass it to `run_forever` method of [websocket-client](https://github.com/websocket-client/websocket-client).
+
 # Example data structure
 
 The data structure coming from CertStream looks like this:
