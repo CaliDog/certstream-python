@@ -14,7 +14,7 @@ It supports automatic reconnection when networks issues occur, and should be sta
 
 setup(
     name='certstream',
-    version="1.8",
+    version="1.9",
     url='https://github.com/CaliDog/certstream-python/',
     author='Ryan Sears',
     install_requires=dependencies,
