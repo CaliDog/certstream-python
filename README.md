@@ -13,6 +13,11 @@ It leverages the excellent 2/3 compatible [websocket-client](https://github.com/
 ```
 pip install certstream
 ```
+# Or install the snap
+
+```
+sudo snap install certstream
+```
 
 # Usage
 
