@@ -1,0 +1,26 @@
+name: certstream # check to see if it's available
+version: '1.0+git' # this is freakin' awesome
+summary: Certstream-Python # 79 char long summary
+description: |
+  Certstream-python is a library for interacting with the certstream network to monitor an aggregated feed from a collection of Certificate Transparency Lists.
+grade: stable # must be 'stable' to release into candidate/stable channels
+confinement: strict # use 'strict' once you have the right plugs
+
+apps:
+  certstream:
+    command: certstream
+    plugs:
+      - home
+      - network
+     
+parts: 
+  my-part:
+    source: https://github.com/kz6fittycent/certstream-python
+    source-type: git
+    plugin: python3
+    
+    build-packages:
+      - python3
+      
+    stage-packages:
+      - python3
