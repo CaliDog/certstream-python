@@ -75,7 +75,7 @@ import certstream
 def print_callback(message, context):
     print("Received messaged -> {}".format(message))
 
-certstream.listen_for_events(print_callback, http_proxy_host="proxy_host", http_proxy_port=8080, http_proxy_auth=("user", "password"))
+certstream.listen_for_events(print_callback, http_proxy_host="proxy_host", http_proxy_port=8080, http_proxy_auth=["user", "password"])
 ```
 
 Need more connection options? Take a look at `**kwargs` in `certstream.listen_for_events`. We pass it to `run_forever` method of [websocket-client](https://github.com/websocket-client/websocket-client/blob/87861f951d1a65ed5d9080f7aaaf44310f376c56/websocket/_app.py#L169-L192).
