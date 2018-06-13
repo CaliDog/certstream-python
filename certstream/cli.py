@@ -15,6 +15,7 @@ parser.add_argument('--json', action='store_true', help='Output raw JSON to the 
 parser.add_argument('--full', action='store_true', help='Output all SAN addresses as well')
 parser.add_argument('--disable-colors', action='store_true', help='Disable colors when writing a human readable ')
 parser.add_argument('--verbose', action='store_true', default=False, dest='verbose', help='Display debug logging.')
+parser.add_argument('--url', action='store', default='wss://certstream.calidog.io', type=str, dest='url', help='CertStream URL.')
 
 def main():
     args = parser.parse_args()
@@ -60,7 +61,7 @@ def main():
 
             sys.stdout.flush()
 
-    certstream.listen_for_events(_handle_messages, skip_heartbeats=True)
+    certstream.listen_for_events(_handle_messages, skip_heartbeats=True, url=args.url)
 
 if __name__ == "__main__":
     main()
