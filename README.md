@@ -43,7 +43,7 @@ def print_callback(message, context):
 
 logging.basicConfig(format='[%(levelname)s:%(name)s] %(asctime)s - %(message)s', level=logging.INFO)
 
-certstream.listen_for_events(print_callback)
+certstream.listen_for_events(print_callback, url='wss://certstream.calidog.io/')
 ```
 
 You can also register an `on_open` and `on_error` handler as well, which do exactly what you'd expect:
@@ -63,7 +63,7 @@ def on_error(instance, exception):
     # Instance is the CertStreamClient instance that barfed
     print("Exception in CertStreamClient! -> {}".format(exception)) 
 
-certstream.listen_for_events(print_callback, on_open=on_open, on_error=on_error)
+certstream.listen_for_events(print_callback, on_open=on_open, on_error=on_error, url='wss://certstream.calidog.io/')
 
 ```
 
@@ -75,7 +75,7 @@ import certstream
 def print_callback(message, context):
     print("Received messaged -> {}".format(message))
 
-certstream.listen_for_events(print_callback, http_proxy_host="proxy_host", http_proxy_port=8080, http_proxy_auth=("user", "password"))
+certstream.listen_for_events(print_callback, url='wss://certstream.calidog.io/', http_proxy_host="proxy_host", http_proxy_port=8080, http_proxy_auth=("user", "password"))
 ```
 
 Need more connection options? Take a look at `**kwargs` in `certstream.listen_for_events`. We pass it to `run_forever` method of [websocket-client](https://github.com/websocket-client/websocket-client/blob/87861f951d1a65ed5d9080f7aaaf44310f376c56/websocket/_app.py#L169-L192).
