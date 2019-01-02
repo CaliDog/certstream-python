@@ -43,7 +43,7 @@ def print_callback(message, context):
 
 logging.basicConfig(format='[%(levelname)s:%(name)s] %(asctime)s - %(message)s', level=logging.INFO)
 
-certstream.listen_for_events(print_callback)
+certstream.listen_for_events(print_callback, 'wss://certstream.calidog.io')
 ```
 
 You can also register an `on_open` and `on_error` handler as well, which do exactly what you'd expect:
@@ -63,8 +63,7 @@ def on_error(instance, exception):
     # Instance is the CertStreamClient instance that barfed
     print("Exception in CertStreamClient! -> {}".format(exception)) 
 
-certstream.listen_for_events(print_callback, on_open=on_open, on_error=on_error)
-
+certstream.listen_for_events(print_callback, 'wss://certstream.calidog.io', on_open=on_open, on_error=on_error)
 ```
 
 We also support connection via http proxy:
