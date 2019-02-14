@@ -22,4 +22,4 @@ def print_callback(message, context):
 
 logging.basicConfig(format='[%(levelname)s:%(name)s] %(asctime)s - %(message)s', level=logging.INFO)
 
-certstream.listen_for_events(print_callback)
+certstream.listen_for_events(print_callback, url='wss://certstream.calidog.io/')

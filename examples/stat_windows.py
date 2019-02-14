@@ -37,4 +37,4 @@ def callback(message, context):
         context.heartbeats.clear()
         context.edge = time.time() + INTERVAL
 
-certstream.listen_for_events(callback, skip_heartbeats=False)
+certstream.listen_for_events(callback, url='wss://certstream.calidog.io/', skip_heartbeats=False)
