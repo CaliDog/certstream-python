@@ -28,7 +28,7 @@ class CertStreamClient(WebSocketApp):
         )
 
     def _on_open(self, instance):
-        logging.info("Connection established to CertStream! Listening for events...")
+        certstream_logger.info("Connection established to CertStream! Listening for events...")
         if self.on_open_handler:
             self.on_open_handler(instance)
 
@@ -45,17 +45,16 @@ class CertStreamClient(WebSocketApp):
             raise
         if self.on_error_handler:
             self.on_error_handler(instance, ex)
-        logging.error("Error connecting to CertStream - {} - Sleeping for a few seconds and trying again...".format(ex))
+        certstream_logger.error("Error connecting to CertStream - {} - Sleeping for a few seconds and trying again...".format(ex))
 
 def listen_for_events(message_callback, url, skip_heartbeats=True, setup_logger=True, on_open=None, on_error=None, **kwargs):
-    if setup_logger:
-        logging.basicConfig(format='[%(levelname)s:%(name)s] %(asctime)s - %(message)s', level=logging.INFO)
-
     try:
         while True:
             c = CertStreamClient(message_callback, url, skip_heartbeats=skip_heartbeats, on_open=on_open, on_error=on_error)
             c.run_forever(**kwargs)
             time.sleep(5)
     except KeyboardInterrupt:
-        logging.info("Kill command received, exiting!!")
+        certstream_logger.info("Kill command received, exiting!!")
 
+certstream_logger = logging.getLogger('certstream')
+certstream_logger.setLevel(logging.INFO)
