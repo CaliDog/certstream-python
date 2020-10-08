@@ -21,10 +21,8 @@ parts:
   certstream:
     source: https://github.com/CaliDog/certstream-python
     source-type: git
-    environment:
-      LC_ALL: C.UTF-8
-      LANG: C.UTF-8
-      PYTHONPATH: $SNAP/usr/lib/python3/dist-packages
+    plugin: python
+    python-version: python3
     
     override-pull: |
       snapcraftctl pull
