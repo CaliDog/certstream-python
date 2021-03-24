@@ -1,2 +1,2 @@
-websocket-client>=0.56.0
+websocket-client>=0.58.0
 termcolor
