@@ -27,12 +27,12 @@ class CertStreamClient(WebSocketApp):
             on_error=self._on_error,
         )
 
-    def _on_open(self):
+    def _on_open(self, _):
         certstream_logger.info("Connection established to CertStream! Listening for events...")
         if self.on_open_handler:
             self.on_open_handler()
 
-    def _on_message(self, message):
+    def _on_message(self, _, message):
         frame = json.loads(message)
 
         if frame.get('message_type', None) == "heartbeat" and self.skip_heartbeats:
@@ -40,7 +40,7 @@ class CertStreamClient(WebSocketApp):
 
         self.message_callback(frame, self._context)
 
-    def _on_error(self, ex):
+    def _on_error(self, _, ex):
         if type(ex) == KeyboardInterrupt:
             raise
         if self.on_error_handler:
