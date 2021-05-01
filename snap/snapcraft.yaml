@@ -1,0 +1,35 @@
+name: certstream
+adopt-info: certstream
+summary: Certstream-Python
+description: |
+  Certstream-python is a library for interacting with the certstream network to monitor an aggregated feed from a collection of Certificate Transparency Lists.
+
+license: MIT
+
+base: core18
+grade: stable
+confinement: strict
+
+apps:
+  certstream:
+    command: certstream
+    plugs:
+      - home
+      - network
+     
+parts: 
+  certstream:
+    source: https://github.com/CaliDog/certstream-python
+    source-type: git
+    plugin: python
+    python-version: python3
+    
+    override-pull: |
+      snapcraftctl pull
+      snapcraftctl set-version "$(git describe --tags | sed 's/^v//' | cut -d "-" -f1)"
+    
+    build-packages:
+      - python3
+      
+    stage-packages:
+      - python3
