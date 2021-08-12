@@ -55,8 +55,7 @@ import certstream
 def print_callback(message, context):
     print("Received messaged -> {}".format(message))
 
-def on_open(instance):
-    # Instance is the CertStreamClient instance that was opened
+def on_open():
     print("Connection successfully established!")
 
 def on_error(instance, exception):
@@ -79,6 +78,14 @@ certstream.listen_for_events(print_callback, url='wss://certstream.calidog.io/',
 ```
 
 Need more connection options? Take a look at `**kwargs` in `certstream.listen_for_events`. We pass it to `run_forever` method of [websocket-client](https://github.com/websocket-client/websocket-client/blob/87861f951d1a65ed5d9080f7aaaf44310f376c56/websocket/_app.py#L169-L192).
+
+e.g. to skip SSL/TLS verification
+```python
+import certstream
+import ssl
+
+certstream.listen_for_events(print_callback, url='wss://certstream.calidog.io/', sslopt={"cert_reqs":ssl.CERT_NONE})
+```
 
 # Example data structure
 
