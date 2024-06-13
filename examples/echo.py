@@ -6,8 +6,9 @@ import certstream
 def print_callback(message, context):
     logging.debug("Message -> {}".format(message))
 
-    if message['message_type'] == "heartbeat":
-        return
+    # As long as listen_for_events() is called with skip_heartbeats=True,
+    # (the default), message['message_type'] == "heartbeat" will not be
+    # received here.
 
     if message['message_type'] == "certificate_update":
         all_domains = message['data']['leaf_cert']['all_domains']
