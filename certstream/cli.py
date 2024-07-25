@@ -5,8 +5,6 @@ import logging
 import sys
 import termcolor
 
-from signal import signal, SIGPIPE, SIG_DFL
-
 import certstream
 
 parser = argparse.ArgumentParser(description='Connect to the CertStream and process CTL list updates.')
@@ -21,7 +19,9 @@ def main():
     args = parser.parse_args()
 
     # Ignore broken pipes
-    signal(SIGPIPE, SIG_DFL)
+    if not sys.platform.startswith("win32"):
+        from signal import signal, SIGPIPE, SIG_DFL
+        signal(SIGPIPE, SIG_DFL)
 
     log_level = logging.INFO
     if args.verbose:
